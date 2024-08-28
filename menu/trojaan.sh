@@ -165,8 +165,9 @@ function menuCheckTraffic () {
     traffic_limit=$(grep -E "^### " "/usr/local/etc/xray/akunxtr.conf" | cut -d ' ' -f 6 | sed -n "${CLIENT_NUMBER}"p)
 
     # Fetch traffic stats from the Xray API
-    downlink=$(xray api statsquery --name "user>>>$user>>>traffic>>>downlink" | jq '.stat.value')
-    uplink=$(xray api statsquery --name "user>>>$user>>>traffic>>>uplink" | jq '.stat.value')
+    downlink=$(xray api statsquery --pattern "user>>>$user>>>traffic>>>downlink" | jq '.stat[0].value')
+    uplink=$(xray api statsquery --pattern "user>>>$user>>>traffic>>>uplink" | jq '.stat[0].value')
+
 
     # Calculate total traffic used
     total_bytes=$((downlink + uplink))
